@@ -5,10 +5,7 @@ import org.example.esundemo.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
@@ -24,25 +21,37 @@ public class ProductController {
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("eventName", "FIFA 2018");
         return "index";
     }
-    @GetMapping("/register")
-    public String register(){
+
+    @PostMapping("/register")
+    public String register(@RequestBody String body){
         user = new User();
-        user.setUserName("test");
-        user.setPhoneNumber(String.valueOf(123456789));
-        user.setPassword(String.valueOf(123));
+        String[] spilt = body.split("&");
+        user.setUserName(spilt[0].split("=")[1]);
+        user.setPhoneNumber(spilt[1].split("=")[1]);
+        user.setPassword(spilt[2].split("=")[1]);
         service.registerUser(user);
         return "index";
     }
     @RequestMapping(value = "/Login",method = RequestMethod.GET)
-    public String Login(Authentication authentication){
-        //System.out.printf(authentication.name());
+    public String Login(){
         user = new User();
-        user.setPhoneNumber(String.valueOf(123456789));
-        user.setPassword(String.valueOf(123));
         service.login(user);
+        return "index";
+    }
+
+    @PostMapping("/borrow")
+    public String borrow(@RequestBody String body){
+        String[] spilt = body.split("&");
+        service.borrow(spilt[0].split("=")[1],spilt[1].split("=")[1]);
+        return "index";
+    }
+
+    @PostMapping("/return")
+    public  String retu(@RequestBody String body){
+        String[] spilt = body.split("&");
+        service.retu(spilt[0].split("=")[1],spilt[1].split("=")[1]);
         return "index";
     }
 }

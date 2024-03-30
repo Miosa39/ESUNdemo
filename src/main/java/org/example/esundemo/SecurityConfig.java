@@ -13,23 +13,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
 @Configuration
 @EnableWebSecurity
-public class BasicAuthSecurity
-{
-    @Bean
-    public PasswordEncoder passwordEncoder()
-    {
-        return new BCryptPasswordEncoder();
-    }
-
+public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/register")
-                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -38,18 +28,12 @@ public class BasicAuthSecurity
         return httpSecurity.build();
     }
     @Bean
-    public InMemoryUserDetailsManager userDetailsService()
-    {
-        UserDetails user = User.builder()
+    public InMemoryUserDetailsManager userDetailsService() {
+        UserDetails user = User.withDefaultPasswordEncoder()
                 .username("12345678")
-                .password(passwordEncoder().encode("12345678"))
-                .roles("USER")
-                .build();
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin@123"))
+                .password("12345678")
                 .roles("ADMIN")
                 .build();
-        return new InMemoryUserDetailsManager(user,admin);
+        return new InMemoryUserDetailsManager(user);
     }
 }

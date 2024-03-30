@@ -20,6 +20,21 @@ public class ProductRepository {
         String procedureCall = "CALL GetUserByPhoneNumber(?)";
         return jdbcTemplate.queryForList(procedureCall,user.getPhoneNumber());
     }
+    public void borrow(String Book_ID,String User_ID){
+        String procedureCall = "CALL borrow5(?,?)";
+        jdbcTemplate.update(procedureCall,Book_ID,User_ID);
+    }
+    public void reborrow(){
+
+    }
+    public List<Map<String, Object>> checkbook(String book_id){
+        String procedureCall = "CALL GetBookByID(?)";
+        return jdbcTemplate.queryForList(procedureCall,book_id);
+    }
+    public void retu(String Book_ID,String User_ID){
+        String procedureCall = "CALL retu(?,?)";
+        jdbcTemplate.update(procedureCall,Book_ID,User_ID);
+    }
 }
 
 
