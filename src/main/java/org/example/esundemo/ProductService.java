@@ -29,6 +29,12 @@ public class ProductService {
         }
         repository.register(user);
     }
+    public List<Map<String, Object>> getBookList(){
+        return repository.getBookList();
+    }
+    public List<Map<String, Object>> getborrowRecord(String User_ID){
+        return repository.getborrowRecord(User_ID);
+    }
     public void login(User user){
         System.out.printf(String.valueOf(repository.findAccountByUsername(user).get(0).get("password")));
         //檢查帳號是否存在
@@ -37,26 +43,33 @@ public class ProductService {
         //取得資料
         //更新資料
     }
-    public void borrow(String Book_ID,String User_ID){
-        if(repository.checkbook(Book_ID)==null){
-            return;//檢查書本是否存在
+    public int borrow(String Book_ID,String User_Phonenumber){
+        if(repository.checkbook(Book_ID).isEmpty()){
+            return -1;//檢查書本是否存在
         }
         if (repository.checkbook(Book_ID).get(0).get("Status") == "on loan") {
-            return;//檢查書本是否出借中
+            return 1;//檢查書本是否出借中
         }
-        repository.borrow(Book_ID,User_ID);
+        if(repository.checkreborrow(Book_ID,User_Phonenumber).isEmpty()) {
+            repository.borrow(Book_ID,User_Phonenumber);
+        }
+        else{
+            repository.reborrow(Book_ID,User_Phonenumber);
+        }
+        return 0;
     }
 
-    public void retu(String Book_ID,String User_ID){
-        System.out.printf(Book_ID+User_ID+"\n");
-        if(repository.checkbook(Book_ID)==null){
+    public void retu(String Book_ID,String User_Phonenumber){
+        if(repository.checkbook(Book_ID).isEmpty()){
             return;//檢查書本是否存在
         }
         if (repository.checkbook(Book_ID).get(0).get("Status") != "on loan") {
            return;//檢查書本是否出借中
         }
-        System.out.printf(Book_ID+User_ID+"\n");
-        repository.retu(Book_ID,User_ID);
+        else {
+            System.out.printf(Book_ID+User_Phonenumber+"\n");
+            repository.retu(Book_ID,User_Phonenumber);
+        }
     }
 }
 

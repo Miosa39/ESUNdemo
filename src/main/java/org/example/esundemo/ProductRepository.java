@@ -20,20 +20,33 @@ public class ProductRepository {
         String procedureCall = "CALL GetUserByPhoneNumber(?)";
         return jdbcTemplate.queryForList(procedureCall,user.getPhoneNumber());
     }
-    public void borrow(String Book_ID,String User_ID){
-        String procedureCall = "CALL borrow5(?,?)";
-        jdbcTemplate.update(procedureCall,Book_ID,User_ID);
+    public int borrow(String Book_ID,String User_ID){
+        String procedureCall = "CALL borrow(?,?)";
+        return jdbcTemplate.update(procedureCall,Book_ID,User_ID);
     }
-    public void reborrow(){
-
+    public int reborrow(String Book_ID,String User_ID){
+        String procedureCall = "CALL reborrow(?,?)";
+        return jdbcTemplate.update(procedureCall,Book_ID,User_ID);
     }
     public List<Map<String, Object>> checkbook(String book_id){
         String procedureCall = "CALL GetBookByID(?)";
         return jdbcTemplate.queryForList(procedureCall,book_id);
     }
+    public List<Map<String, Object>> checkreborrow(String Book_ID,String User_ID){
+        String procedureCall = "CALL GetUserBycheckreborrow(?,?)";
+        return jdbcTemplate.queryForList(procedureCall,Book_ID,User_ID);
+    }
     public void retu(String Book_ID,String User_ID){
         String procedureCall = "CALL retu(?,?)";
         jdbcTemplate.update(procedureCall,Book_ID,User_ID);
+    }
+    public List<Map<String, Object>> getBookList(){
+        String procedureCall = "CALL GetBookList()";
+        return jdbcTemplate.queryForList(procedureCall);
+    }
+    public List<Map<String, Object>> getborrowRecord(String User_ID){
+        String procedureCall = "CALL GetborrowRecord(User_ID)";
+        return jdbcTemplate.queryForList(procedureCall);
     }
 }
 

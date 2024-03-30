@@ -11,6 +11,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+import java.util.Map;
+
 @Controller
 public class ProductController {
     @Autowired
@@ -24,6 +28,17 @@ public class ProductController {
         return "index";
     }
 
+    @GetMapping("/bookList")
+    public  String bookList(@RequestBody String body){
+        List<Map<String, Object>> bookList = service.getBookList();
+        return "index";
+    }
+    @PostMapping("/bprrowRecord")
+    public  String borrowRecord(@RequestBody String body){
+        String[] spilt = body.split("&");
+        List<Map<String, Object>> borrowRecordList = service.getborrowRecord(spilt[0].split("=")[1]);
+        return "index";
+    }
     @PostMapping("/register")
     public String register(@RequestBody String body){
         user = new User();
